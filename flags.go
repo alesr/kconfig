@@ -15,7 +15,6 @@ func setFlags() {
 	flag.Parse()
 
 	if *printFlagPtr {
-
 		*outputFlagPtr = false
 		print()
 	}
@@ -30,7 +29,6 @@ func setFlags() {
 	}
 
 	if *outputFlagPtr {
-
 		_, fileExist, err := checkFile()
 		if err != nil {
 			log.Fatal(err)
