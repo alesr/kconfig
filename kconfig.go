@@ -64,20 +64,20 @@ func (c *Config) changeCheckoutMode() {
 // Stdout Braintree chechout mode.
 func (c *Config) checkoutMode() {
 	if c.Checkout.Mode {
-		fmt.Printf("\n   Braintree set to PRODUCTION mode.\n")
+		fmt.Printf("\n   Braintree set to PRODUCTION mode\n\n")
 	} else {
-		fmt.Printf("\n   Braintree set to SANDBOX mode.\n")
+		fmt.Printf("\n   Braintree set to SANDBOX mode\n\n")
 	}
 }
 
 // Stdout JSON config file.
 func print() {
-	path, fileExist, err := checkFile()
+	path, exist, err := checkFile()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if !fileExist {
+	if !exist {
 		ask4file()
 	} else {
 		content, err := ioutil.ReadFile(path)
@@ -95,12 +95,12 @@ func decode() (*Config, error) {
 
 	c := new(Config)
 
-	path, fileExist, err := checkFile()
+	path, exist, err := checkFile()
 	if err != nil {
 		return nil, err
 	}
 
-	if !fileExist {
+	if !exist {
 		ask4file()
 	} else {
 		file, err := os.Open(path)
@@ -158,7 +158,7 @@ func (c *Config) new() {
 		log.Fatal("Failed to write JSON file\n", err)
 	}
 
-	fmt.Printf("\n%s was successfully created\n", filename)
+	fmt.Printf("\n%s was successfully created\n\n", filename)
 }
 
 func checkFile() (string, bool, error) {
@@ -193,7 +193,35 @@ func ask4file() {
 	if input == "y" {
 		c := new(Config)
 		c.new()
-	} else {
-		os.Exit(0)
 	}
+	os.Exit(0)
+}
+
+func remove() (string, error) {
+
+	path, exist, err := checkFile()
+	if err != nil {
+		return "", err
+	}
+
+	if !exist {
+		return fmt.Sprintf("Can't remove %s. File does not exist.", filename), nil
+	}
+
+	var input string
+	fmt.Printf("\nAre you sure you want to remove %s? Y / N\n\n$ ", filename)
+
+	_, err = fmt.Scan(&input)
+
+	input = strings.ToLower(input)
+
+	if err != nil || (input != "y" && input != "n") {
+		fmt.Println(errors.New("\nType Y for yes or N for no"))
+		remove()
+	}
+
+	if err := os.Remove(path); err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%s was successfully deleted", filename), nil
 }
