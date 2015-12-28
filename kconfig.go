@@ -158,7 +158,7 @@ func (c *Config) new() {
 		log.Fatal("Failed to write JSON file\n", err)
 	}
 
-	fmt.Printf("\n%s was successfully created", filename)
+	fmt.Printf("\n%s was successfully created\n", filename)
 }
 
 func checkFile() (string, bool, error) {
