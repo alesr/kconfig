@@ -4,11 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 )
 
 func setFlags() {
 
+	// Define flags.
 	printFlagPtr := flag.Bool("p", false, "Print JSON configuration file.")
 	outputFlagPtr := flag.Bool("o", true, "Output Braintree mode.")
 	modifyFlagPtr := flag.Bool("m", false, "Modify Braintree mode.")
@@ -16,11 +16,13 @@ func setFlags() {
 
 	flag.Parse()
 
+	// To print kconfig.json content.
 	if *printFlagPtr {
 		*outputFlagPtr = false
 		print()
 	}
 
+	// Open option to change the checkout's mode field.
 	if *modifyFlagPtr {
 		*outputFlagPtr = false
 		c, err := decode()
@@ -30,6 +32,7 @@ func setFlags() {
 		c.changeCheckoutMode()
 	}
 
+	// To remove existing kconfig.json.
 	if *removeFlagPtr {
 		*outputFlagPtr = false
 		msg, err := remove()
@@ -40,6 +43,7 @@ func setFlags() {
 		fmt.Printf("\n%s\n\n", msg)
 	}
 
+	// Output actual checkout mode.
 	if *outputFlagPtr {
 		c, err := decode()
 		if err != nil {
@@ -47,6 +51,4 @@ func setFlags() {
 		}
 		c.checkoutMode()
 	}
-
-	os.Exit(0)
 }

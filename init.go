@@ -2,29 +2,31 @@ package kconfig
 
 const filename = "kconfig.json"
 
-// Config will be used to create a JSON
-// file for traditionalbox website's configuration.
+// Config will be used to create a template JSON file
+// containing some variables used to website's configuration.
 type Config struct {
-	Filename string     `json:"filename"`
-	Filepath string     `json:"filepath"`
-	Products []*Product `json:"products"`
-	Checkout *Checkout  `json:"checkout"`
+	Filename string     `json:"filename"` // "kconfig.json"
+	filepath string     // Path to the directory where the program is executed.
+	Products []*Product `json:"products"` // List of all products.
+	Checkout *Checkout  `json:"checkout"` // Environment variables related to the checkout functioning.
 }
 
-// Checkout setup
+// Checkout setup.
 type Checkout struct {
-	Mode      bool       `json:"mode"`
-	MaxQtd    byte       `json:"max_qtd"`
-	Braintree *Braintree `json:"braintree"`
+	Mode      bool       `json:"mode"`      // Related to Braintree mode. False to Sandbox, true for Production.
+	MaxQtd    byte       `json:"max_qtd"`   // Maximum quantity of items available to buy at once.
+	Braintree *Braintree `json:"braintree"` // Braintree account credentials.
 }
 
-// Braintree setup
+// Braintree have two distinct modes:
+// Production and sandbox (tests).
 type Braintree struct {
 	Production *Setup `json:"production"`
 	Sandbox    *Setup `json:"sandbox"`
 }
 
-// Setup Braintree account credentials
+// Setup Braintree account credentials.
+// Data provided by Braintree after account creation.
 type Setup struct {
 	Environment string `json:"environment"`
 	MerchantID  string `json:"merchant_id"`
@@ -32,7 +34,7 @@ type Setup struct {
 	PrivateKey  string `json:"private_key"`
 }
 
-// Product specifications
+// Product specifications.
 type Product struct {
 	Name        string `json:"name"`
 	AltName     string `json:"alternative_name"`
@@ -40,7 +42,7 @@ type Product struct {
 	Price       int    `json:"price"`
 }
 
-// Init the program
+// Init the program.
 func Init() {
 	setFlags()
 }
